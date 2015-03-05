@@ -28,11 +28,11 @@ public interface FuturePhase<F, T> extends Phase<F, CompletableFuture<T>> {
         return input -> this.transform(input).thenApplyAsync(that::transform, executor);
     }
 
-    default CheckedPhase<F, T, Exception> andWait(@Nonnull final Duration timeout) {
+    default ExceptionalPhase<F, T, Exception> andWait(@Nonnull final Duration timeout) {
         return this.andWait(timeout.toNanos(), TimeUnit.NANOSECONDS);
     }
 
-    default CheckedPhase<F, T, Exception> andWait(@Nonnegative final long timeout, final TimeUnit timeoutUnit) {
+    default ExceptionalPhase<F, T, Exception> andWait(@Nonnegative final long timeout, final TimeUnit timeoutUnit) {
         return input -> this.transform(input).get(timeout, timeoutUnit);
     }
 

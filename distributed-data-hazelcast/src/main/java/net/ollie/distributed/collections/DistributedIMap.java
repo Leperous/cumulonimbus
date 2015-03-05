@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.KeyValueSource;
 import com.hazelcast.nio.ObjectDataInput;
@@ -18,11 +22,13 @@ import com.hazelcast.nio.serialization.DataSerializable;
  * @author Ollie
  */
 public class DistributedIMap<K, V>
-        implements DistributedHazelcastMap<K, V>, MutableDistributedMap<K, V>, DataSerializable {
+        implements DistributedHazelcastMap<K, V>, MutableDistributedMap<K, V>, HazelcastInstanceAware, DataSerializable {
 
-    private IMap<K, V> delegate;
+    private String mapName;
+    private transient volatile IMap<K, V> delegate;
 
-    public DistributedIMap(final IMap<K, V> delegate) {
+    public DistributedIMap(@Nonnull final IMap<K, V> delegate) {
+        this.mapName = delegate.getName();
         this.delegate = delegate;
     }
 
@@ -93,12 +99,17 @@ public class DistributedIMap<K, V>
 
     @Override
     public void writeData(final ObjectDataOutput out) throws IOException {
-        out.writeObject(delegate);
+        out.writeUTF(mapName);
     }
 
     @Override
     public void readData(final ObjectDataInput in) throws IOException {
-        delegate = in.readObject();
+        mapName = in.readUTF();
+    }
+
+    @Override
+    public void setHazelcastInstance(final HazelcastInstance hazelcastInstance) {
+        delegate = hazelcastInstance.getMap(mapName);
     }
 
 }

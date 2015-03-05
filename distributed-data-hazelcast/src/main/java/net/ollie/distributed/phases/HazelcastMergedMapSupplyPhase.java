@@ -1,7 +1,7 @@
 package net.ollie.distributed.phases;
 
 import net.ollie.distributed.collections.DistributedHazelcastMap;
-import net.ollie.distributed.collections.DistributedMergeMap;
+import net.ollie.distributed.collections.DistributedMergeValueMap;
 import net.ollie.distributed.functions.SerializableBiFunction;
 
 /**
@@ -27,7 +27,7 @@ public class HazelcastMergedMapSupplyPhase<K, V1, V2, V>
 
     @Override
     public DistributedHazelcastMap<K, V> supply() {
-        return new DistributedMergeMap<>(left, right, merge);
+        return new DistributedMergeValueMap<>(left, right, merge);
     }
 
 }

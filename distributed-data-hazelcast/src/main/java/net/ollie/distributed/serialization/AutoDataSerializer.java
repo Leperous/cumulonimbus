@@ -21,7 +21,7 @@ public class AutoDataSerializer implements StreamSerializer<AutoDataSerialized> 
     private final Map<Class<? extends AutoDataSerialized>, List<Field>> fields = new ConcurrentHashMap<>();
     private final int typeId;
 
-    public AutoDataSerializer(int typeId) {
+    public AutoDataSerializer(final int typeId) {
         this.typeId = typeId;
     }
 
@@ -51,7 +51,8 @@ public class AutoDataSerializer implements StreamSerializer<AutoDataSerialized> 
         try {
             final AutoDataSerialized object = clazz.newInstance();
             for (final Field field : fields.computeIfAbsent(clazz, this::fields)) {
-                field.set(object, in.readObject());
+                final Object value = in.readObject();
+                field.set(object, value);
             }
             return object;
         } catch (final IllegalAccessException | InstantiationException ex) {

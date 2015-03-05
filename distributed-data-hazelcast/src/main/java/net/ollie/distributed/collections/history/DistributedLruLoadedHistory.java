@@ -4,29 +4,30 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import net.ollie.distributed.collections.DistributedHazelcastMap;
-import net.ollie.distributed.collections.DistributedIMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.ollie.distributed.collections.DistributedHazelcastMap;
+import net.ollie.distributed.collections.DistributedIMap;
 import net.ollie.distributed.functions.KeyPredicateWrapper;
 import net.ollie.distributed.functions.SerializableBiPredicate;
 
 /**
+ * Loads data on demand for some temporal key.
  *
+ * @param <T> temporal type.
  * @author Ollie
  */
-public class DistributedLruHistory<T, K, V>
+public class DistributedLruLoadedHistory<T, K, V>
         implements DistributedHazelcastHistory<T, K, V> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DistributedLruHistory.class);
+    private static final Logger logger = LoggerFactory.getLogger(DistributedLruLoadedHistory.class);
     private final LinkedHashMap<T, DistributedHazelcastMap<K, V>> maps;
     private final DistributedIMap<K, V> target;
     private final SerializableBiPredicate<? super T, ? super K> datePredicate;
     private final Function<? super T, Map<? extends K, ? extends V>> load;
 
-    public DistributedLruHistory(final int maxSize,
+    public DistributedLruLoadedHistory(final int maxSize,
             final DistributedIMap<K, V> target,
             final SerializableBiPredicate<? super T, ? super K> datePredicate,
             final Function<? super T, Map<? extends K, ? extends V>> load) {
@@ -66,7 +67,7 @@ public class DistributedLruHistory<T, K, V>
         @Override
         protected boolean removeEldestEntry(final Map.Entry<T, DistributedHazelcastMap<K, V>> eldest) {
             if (this.size() >= maxCapacity) {
-                DistributedLruHistory.this.unload(eldest.getKey(), eldest.getValue());
+                DistributedLruLoadedHistory.this.unload(eldest.getKey(), eldest.getValue());
                 return true;
             }
             return false;

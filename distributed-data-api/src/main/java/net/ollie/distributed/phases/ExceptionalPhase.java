@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
  *
  * @author Ollie
  */
-public interface CheckedPhase<F, T, X extends Exception> extends Phase<F, T> {
+public interface ExceptionalPhase<F, T, X extends Exception> extends Phase<F, T> {
 
     @Nonnull
     T transformChecked(@Nonnull F from) throws X;

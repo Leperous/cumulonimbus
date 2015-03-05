@@ -5,10 +5,11 @@ import static java.lang.Math.addExact;
 import static java.lang.Math.toIntExact;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 
-import com.hazelcast.mapreduce.KeyValueSource;
+import javax.annotation.Nonnull;
+
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
@@ -16,23 +17,25 @@ import com.hazelcast.nio.serialization.DataSerializable;
 import net.ollie.distributed.functions.SerializableBiFunction;
 
 /**
+ * A merge of two distributed maps with the same key type but different value
+ * type.
  *
  * @author Ollie
  */
-public class DistributedMergeMap<K, A, B, V>
+public class DistributedMergeValueMap<K, A, B, V>
         implements DistributedHazelcastMap<K, V>, DataSerializable {
 
     private DistributedHazelcastMap<K, A> left;
     private DistributedHazelcastMap<K, B> right;
     private SerializableBiFunction<? super A, ? super B, ? extends V> merge;
 
-    public DistributedMergeMap(
-            final DistributedHazelcastMap<K, A> left,
-            final DistributedHazelcastMap<K, B> right,
-            final SerializableBiFunction<? super A, ? super B, ? extends V> merge) {
-        this.left = left;
-        this.right = right;
-        this.merge = merge;
+    public DistributedMergeValueMap(
+            @Nonnull final DistributedHazelcastMap<K, A> left,
+            @Nonnull final DistributedHazelcastMap<K, B> right,
+            @Nonnull final SerializableBiFunction<? super A, ? super B, ? extends V> merge) {
+        this.left = requireNonNull(left);
+        this.right = requireNonNull(right);
+        this.merge = requireNonNull(merge);
     }
 
     @Override
@@ -41,21 +44,11 @@ public class DistributedMergeMap<K, A, B, V>
     }
 
     @Override
-    public Map<K, V> localMap() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Set<K> localKeys() {
         final Set<K> keys = new HashSet<>(toIntExact(addExact(left.size(), right.size())));
         keys.addAll(left.localKeys());
         keys.addAll(right.localKeys());
         return keys;
-    }
-
-    @Override
-    public KeyValueSource<K, V> source() {
-        throw new UnsupportedOperationException();
     }
 
     @Override

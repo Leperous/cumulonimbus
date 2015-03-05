@@ -4,8 +4,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that Hazelcast must be able to serialize any and all concrete
- * subclasses of this class.
+ * Indicates that Hazelcast must be able to serialize the annotated class and
+ * any/all of its subclasses.
  *
  * @author Ollie
  */

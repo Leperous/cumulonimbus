@@ -29,7 +29,7 @@ public interface DistributedHazelcastMap<K, V>
     }
 
     default <V2, V3> DistributedHazelcastMap<K, V3> compose(final DistributedHazelcastMap<K, V2> that, final SerializableBiFunction<V, V2, V3> merge) {
-        return new DistributedMergeMap<>(this, that, merge);
+        return new DistributedMergeValueMap<>(this, that, merge);
     }
 
     @Override
