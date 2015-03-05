@@ -4,21 +4,21 @@
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>net.ollie</groupId>
-    <artifactId>distributed-data</artifactId>
+    <artifactId>cumulonimbus</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <slf4j.version>1.7.10</slf4j.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     
     <modules>
-        <module>distributed-data-api</module>
-        <module>distributed-data-hazelcast</module>
-        <module>distributed-data-local</module>
-        <module>distributed-data-hadoop</module>
+        <module>cumulonimbus-api</module>
+        <module>cumulonimbus-hazelcast</module>
+        <module>cumulonimbus-local</module>
     </modules>
     
     <dependencies>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
     
