@@ -7,30 +7,35 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.annotation.Nonnull;
+
 import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.EntryListener;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.MapEvent;
 
-import net.ollie.distributed.collections.DistributedHazelcastMap;
-
 /**
  * Maintains an (asynchronously) updated, read-only map in local memory.
  *
- * This is useful for small, rarely-updating maps.
+ * The main function of this class is to allow fast distributed map joins where keys would otherwise be on different
+ * nodes. This is not only slow to use within a distributed execution, but also Hazelcast does not permit it.
+ *
+ * This class is not suitable for large, updating maps.
  *
  * @author Ollie
  */
 public abstract class LocalAsyncReadMap<K, V>
-        implements DistributedHazelcastMap<K, V> {
+        implements LocalMap<K, V> {
 
     private final ConcurrentMap<K, V> localMap;
+    private final String id;
 
-    protected LocalAsyncReadMap(final IMap<K, V> distributedMap) {
+    protected LocalAsyncReadMap(@Nonnull final IMap<K, V> distributedMap) {
         this(distributedMap, new ConcurrentHashMap<>(distributedMap.size()));
     }
 
-    protected LocalAsyncReadMap(final IMap<K, V> distributedMap, final ConcurrentMap<K, V> localMap) {
+    protected LocalAsyncReadMap(@Nonnull final IMap<K, V> distributedMap, @Nonnull final ConcurrentMap<K, V> localMap) {
+        this.id = distributedMap.getName();
         this.localMap = listenTo(distributedMap);
     }
 
@@ -39,6 +44,11 @@ public abstract class LocalAsyncReadMap<K, V>
         distributedMap.addEntryListener(new UpdatingEntryListener<>(map), true);
         distributedMap.entrySet().forEach(entry -> map.putIfAbsent(entry.getKey(), entry.getValue()));
         return map;
+    }
+
+    @Override
+    public String id() {
+        return id;
     }
 
     @Override

@@ -17,8 +17,7 @@ import com.hazelcast.nio.serialization.DataSerializable;
 import net.ollie.distributed.functions.SerializableBiFunction;
 
 /**
- * A merge of two distributed maps with the same key type but different value
- * type.
+ * A merge of two distributed maps with the same key type but different value type.
  *
  * @author Ollie
  */
@@ -28,6 +27,10 @@ public class DistributedMergeValueMap<K, A, B, V>
     private DistributedHazelcastMap<K, A> left;
     private DistributedHazelcastMap<K, B> right;
     private SerializableBiFunction<? super A, ? super B, ? extends V> merge;
+
+    @Deprecated
+    DistributedMergeValueMap() {
+    }
 
     public DistributedMergeValueMap(
             @Nonnull final DistributedHazelcastMap<K, A> left,
@@ -61,6 +64,11 @@ public class DistributedMergeValueMap<K, A, B, V>
     public void close() {
         left.close();
         right.close();
+    }
+
+    @Override
+    public String toString() {
+        return "Merge values: [" + left + "] & [" + right + "]";
     }
 
     @Override

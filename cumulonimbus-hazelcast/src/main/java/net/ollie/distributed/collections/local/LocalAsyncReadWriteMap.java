@@ -8,6 +8,7 @@ import javax.annotation.CheckForNull;
 import com.hazelcast.core.IMap;
 
 /**
+ * Asynchronously reads and writes from/to Hazelcast.
  *
  * @author Ollie
  */

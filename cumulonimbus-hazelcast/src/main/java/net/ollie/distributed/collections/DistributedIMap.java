@@ -27,6 +27,10 @@ public class DistributedIMap<K, V>
     private String mapName;
     private transient volatile IMap<K, V> delegate;
 
+    @Deprecated
+    DistributedIMap() {
+    }
+
     public DistributedIMap(@Nonnull final IMap<K, V> delegate) {
         this.mapName = delegate.getName();
         this.delegate = delegate;
