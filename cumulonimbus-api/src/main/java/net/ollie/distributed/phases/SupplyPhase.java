@@ -3,7 +3,6 @@ package net.ollie.distributed.phases;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
 import net.ollie.distributed.functions.NonnullSupplier;
@@ -24,13 +23,13 @@ public interface SupplyPhase<T> extends Phase<Object, T>, NonnullSupplier<T> {
         return this.get();
     }
 
-    @CheckReturnValue
-    default <R> SupplyPhase<R> supply(@Nonnull final Phase<? super T, ? extends R> that) {
+    @Override
+    default <R> SupplyPhase<R> andThen(@Nonnull final Phase<? super T, ? extends R> that) {
         return () -> that.transform(this.get());
     }
 
-    @CheckReturnValue
-    default <R> SupplyFuturePhase<R> supply(@Nonnull final FuturePhase<? super T, R> that) {
+    @Override
+    default <R> SupplyFuturePhase<R> andThen(@Nonnull final FuturePhase<? super T, R> that) {
         return () -> that.transform(this.get());
     }
 

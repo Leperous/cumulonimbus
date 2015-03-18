@@ -3,7 +3,6 @@ package net.ollie.distributed.utils;
 import java.util.List;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.StreamSupport;
 
 /**
  *
@@ -15,7 +14,7 @@ public final class Lists {
     }
 
     public static <F, T> List<T> serialTransform(final Iterable<? extends F> iterable, final Function<? super F, ? extends T> transform) {
-        return StreamSupport.stream(iterable.spliterator(), false).map(transform).collect(toList());
+        return Streams.serialStream(iterable).map(transform).collect(toList());
     }
 
 }

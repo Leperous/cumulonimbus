@@ -19,12 +19,12 @@ import javax.annotation.Nonnull;
 public interface FuturePhase<F, T> extends Phase<F, CompletableFuture<T>> {
 
     @CheckReturnValue
-    default <X> Phase<F, CompletableFuture<X>> andLater(@Nonnull final Phase<? super T, ? extends X> that) {
+    default <X> FuturePhase<F, X> andLater(@Nonnull final Phase<? super T, ? extends X> that) {
         return input -> this.transform(input).thenApply(that::transform);
     }
 
     @CheckReturnValue
-    default <X> Phase<F, CompletableFuture<X>> andLater(@Nonnull final Phase<? super T, ? extends X> that, @Nonnull final Executor executor) {
+    default <X> FuturePhase<F, X> andLater(@Nonnull final Phase<? super T, ? extends X> that, @Nonnull final Executor executor) {
         return input -> this.transform(input).thenApplyAsync(that::transform, executor);
     }
 

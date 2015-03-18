@@ -47,10 +47,10 @@ public class DistributedMergeValueMap<K, A, B, V>
     }
 
     @Override
-    public Set<K> localKeys() {
+    public Set<K> copyKeys() {
         final Set<K> keys = new HashSet<>(toIntExact(addExact(left.size(), right.size())));
-        keys.addAll(left.localKeys());
-        keys.addAll(right.localKeys());
+        keys.addAll(left.copyKeys());
+        keys.addAll(right.copyKeys());
         return keys;
     }
 

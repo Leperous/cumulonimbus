@@ -42,17 +42,17 @@ public class DistributedIMap<K, V>
     }
 
     @Override
-    public Map<K, V> localMap() {
+    public Map<K, V> copyMap() {
         return new HashMap<>(delegate);
     }
 
     @Override
-    public Map<K, V> localMap(final Set<K> keys) {
-        return delegate.getAll(keys);
+    public <K2 extends K> Map<K2, V> copyMap(final Set<K2> keys) {
+        return delegate.getAll((Set) keys);
     }
 
     @Override
-    public Set<K> localKeys() {
+    public Set<K> copyKeys() {
         return delegate.keySet();
     }
 

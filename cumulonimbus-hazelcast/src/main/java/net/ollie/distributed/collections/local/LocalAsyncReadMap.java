@@ -65,12 +65,12 @@ public abstract class LocalAsyncReadMap<K, V>
     }
 
     @Override
-    public Map<K, V> localMap() {
+    public Map<K, V> copyMap() {
         return new HashMap<>(localMap);
     }
 
     @Override
-    public Set<K> localKeys() {
+    public Set<K> copyKeys() {
         return new HashSet<>(localMap.keySet());
     }
 

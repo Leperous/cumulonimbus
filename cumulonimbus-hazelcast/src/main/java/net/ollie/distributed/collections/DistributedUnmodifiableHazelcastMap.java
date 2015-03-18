@@ -32,8 +32,8 @@ public class DistributedUnmodifiableHazelcastMap<K, V>
     }
 
     @Override
-    public Set<K> localKeys() {
-        return Collections.unmodifiableSet(delegate.localKeys());
+    public Set<K> copyKeys() {
+        return Collections.unmodifiableSet(delegate.copyKeys());
     }
 
     @Override

@@ -34,15 +34,15 @@ public class DistributedFilteredHazelcastMap<K, V>
     }
 
     @Override
-    public Map<K, V> localMap() {
-        final Map<K, V> local = delegate.localMap();
+    public Map<K, V> copyMap() {
+        final Map<K, V> local = delegate.copyMap();
         local.keySet().removeIf(predicate::evaluate);
         return local;
     }
 
     @Override
-    public Set<K> localKeys() {
-        final Set<K> keys = delegate.localKeys();
+    public Set<K> copyKeys() {
+        final Set<K> keys = delegate.copyKeys();
         keys.removeIf(predicate::evaluate);
         return keys;
     }
@@ -55,7 +55,7 @@ public class DistributedFilteredHazelcastMap<K, V>
 
     @Override
     public void close() {
-        this.evict(this.localKeys());
+        this.evict(this.copyKeys());
     }
 
     @Override

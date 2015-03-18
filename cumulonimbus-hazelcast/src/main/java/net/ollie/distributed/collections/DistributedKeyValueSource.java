@@ -42,7 +42,7 @@ public class DistributedKeyValueSource<K, V>
     @Override
     public boolean open(final NodeEngine ne) {
         if (partitions == null) {
-            partitions = partition(source.localKeys(), ne.getHazelcastInstance().getPartitionService());
+            partitions = partition(source.copyKeys(), ne.getHazelcastInstance().getPartitionService());
         }
         partitionKeys = partitions.getOrDefault(partitionId, Collections.emptyList()).iterator();
         return true;
@@ -100,7 +100,7 @@ public class DistributedKeyValueSource<K, V>
 
     @Override
     protected Collection<K> getAllKeys0() {
-        return source.localKeys();
+        return source.copyKeys();
     }
 
     @Override

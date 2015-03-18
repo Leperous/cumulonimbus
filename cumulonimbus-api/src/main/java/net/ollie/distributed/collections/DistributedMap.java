@@ -16,29 +16,29 @@ public interface DistributedMap<K, V>
         extends DistributedFunction<K, V> {
 
     @Nonnull
-    Set<K> localKeys();
+    Set<K> copyKeys();
 
     /**
      *
      * @return a mutable copy of all the data in memory.
      */
     @Nonnull
-    default Map<K, V> localMap() {
-        final Set<K> keys = this.localKeys();
+    default Map<K, V> copyMap() {
+        final Set<K> keys = this.copyKeys();
         final Map<K, V> map = Maps.newHashMap(keys.size());
         keys.forEach(key -> map.put(key, this.get(key)));
         return map;
     }
 
     @Nonnull
-    default Map<K, V> localMap(final Set<K> keys) {
-        final Map<K, V> local = Maps.newHashMap(keys.size());
+    default <K2 extends K> Map<K2, V> copyMap(final Set<K2> keys) {
+        final Map<K2, V> local = Maps.newHashMap(keys.size());
         keys.forEach(key -> local.put(key, this.get(key)));
         return local;
     }
 
     default long size() {
-        return this.localKeys().size();
+        return this.copyKeys().size();
     }
 
     void evict(Collection<K> keys);

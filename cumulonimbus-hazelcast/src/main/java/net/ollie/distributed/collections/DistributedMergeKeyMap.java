@@ -40,8 +40,8 @@ public class DistributedMergeKeyMap<K, V, V1, K2, V2>
     }
 
     @Override
-    public Set<K> localKeys() {
-        return map.localKeys();
+    public Set<K> copyKeys() {
+        return map.copyKeys();
     }
 
     @Override

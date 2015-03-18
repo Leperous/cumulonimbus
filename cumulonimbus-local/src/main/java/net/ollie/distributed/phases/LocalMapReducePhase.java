@@ -42,7 +42,7 @@ public class LocalMapReducePhase<K1, V1, K2, V2> implements FuturePhase<Distribu
 
     private CompletableFuture<Map<K2, Collection<V1>>> mapAll(final DistributedMap<K1, V1> source) {
         final Map<K2, Collection<V1>> multimap = new ConcurrentHashMap<>();
-        final List<CompletableFuture<?>> futures = source.localKeys()
+        final List<CompletableFuture<?>> futures = source.copyKeys()
                 .stream()
                 .map(key -> this.map(key, source, multimap)) //Create a future for each key
                 .collect(toList());

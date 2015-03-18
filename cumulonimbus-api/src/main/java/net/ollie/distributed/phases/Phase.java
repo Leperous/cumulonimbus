@@ -1,7 +1,5 @@
 package net.ollie.distributed.phases;
 
-import java.util.concurrent.CompletableFuture;
-
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
@@ -22,7 +20,7 @@ public interface Phase<F, T> {
 
     @Nonnull
     @CheckReturnValue
-    default <X> FuturePhase<F, X> andAfter(final Phase<? super T, ? extends CompletableFuture<X>> that) {
+    default <X> FuturePhase<F, X> andThen(final FuturePhase<? super T, X> that) {
         return input -> that.transform(this.transform(input));
     }
 
