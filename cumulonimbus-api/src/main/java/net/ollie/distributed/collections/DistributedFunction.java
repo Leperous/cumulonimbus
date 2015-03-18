@@ -18,7 +18,7 @@ public interface DistributedFunction<K, V> {
 
     @Nonnull
     default V getOrDefault(final K key, @Nonnull final V value) {
-        return this.getOrElse(key, () -> requireNonNull(value));
+        return this.getOrElse(key, (NonnullSupplier<V>) () -> requireNonNull(value));
     }
 
     @Nonnull

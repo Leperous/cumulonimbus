@@ -18,7 +18,7 @@ public final class Maps {
     public static int capacity(final int size) {
         return size <= 4
                 ? size
-                : (size * 4 / 3);
+                : size * 4 / 3;
     }
 
 }

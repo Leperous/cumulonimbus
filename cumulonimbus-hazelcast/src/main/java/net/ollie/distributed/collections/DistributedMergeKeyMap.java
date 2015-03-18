@@ -47,7 +47,7 @@ public class DistributedMergeKeyMap<K, V, V1, K2, V2>
     @Override
     public void evict(final Collection<K> keys) {
         map.evict(keys);
-        final Collection<K2> localKeys = Lists.transform(keys, this::localKey);
+        final Collection<K2> localKeys = Lists.serialTransform(keys, this::localKey);
         localMap.evict(localKeys);
     }
 

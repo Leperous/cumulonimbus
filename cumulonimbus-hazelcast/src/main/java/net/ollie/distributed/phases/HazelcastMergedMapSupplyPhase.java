@@ -26,7 +26,7 @@ public class HazelcastMergedMapSupplyPhase<K, V1, V2, V>
     }
 
     @Override
-    public DistributedHazelcastMap<K, V> supply() {
+    public DistributedHazelcastMap<K, V> get() {
         return new DistributedMergeValueMap<>(left, right, merge);
     }
 

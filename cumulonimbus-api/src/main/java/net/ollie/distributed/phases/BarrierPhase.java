@@ -16,7 +16,7 @@ public interface BarrierPhase<F, T> extends FuturePhase<Collection<? extends F>,
 
     @Nonnull
     default Collection<CompletableFuture<T>> flatMap(@Nonnull final Collection<? extends F> collection) {
-        return Lists.transform(collection, object -> this.transform(Collections.singleton(object)));
+        return Lists.serialTransform(collection, object -> this.transform(Collections.singleton(object)));
     }
 
 }

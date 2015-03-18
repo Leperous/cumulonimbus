@@ -1,20 +1,24 @@
 package net.ollie.distributed.phases;
 
+import java.util.concurrent.Executor;
+import java.util.function.Consumer;
+
 /**
  *
  * @author Ollie
  */
-public interface ConsumePhase<T> extends Phase<T, Object> {
+public interface ConsumePhase<T> extends Phase<T, T> {
 
     void consume(T object);
 
     @Override
-    @Deprecated
-    default Object transform(final T from) {
+    default T transform(final T from) {
         this.consume(from);
-        return CONSUMED;
+        return from;
     }
 
-    Object CONSUMED = new Object();
+    static <T> ConsumePhase<T> async(final Consumer<? super T> consumer, final Executor executor) {
+        return object -> executor.execute(() -> consumer.accept(object));
+    }
 
 }
