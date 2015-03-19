@@ -4,9 +4,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that instances of the annotated class do not themselves serialize,
- * but are instead made available on all nodes, perhaps via some dependency
- * injection mechanism.
+ * Indicates that instances of the annotated class do not themselves serialize, but are instead made available on all
+ * nodes, perhaps via some dependency injection mechanism.
  *
  * @author Ollie
  */

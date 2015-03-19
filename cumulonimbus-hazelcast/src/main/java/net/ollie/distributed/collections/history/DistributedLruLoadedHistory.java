@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import net.ollie.distributed.collections.DistributedHazelcastMap;
 import net.ollie.distributed.collections.DistributedIMap;
-import net.ollie.distributed.functions.KeyPredicateWrapper;
 import net.ollie.distributed.functions.SerializableBiPredicate;
 
 /**
@@ -46,7 +45,7 @@ public class DistributedLruLoadedHistory<T, K, V>
         logger.info("Loading data for [{}] ...", date);
         final Map<? extends K, ? extends V> loaded = load.apply(date);
         target.writeAll(loaded);
-        return target.filter(new KeyPredicateWrapper<>(datePredicate.partialLeft(date)));
+        return target.filter(datePredicate.partialLeft(date));
     }
 
     protected void unload(final T date, final DistributedHazelcastMap<K, V> map) {

@@ -82,6 +82,11 @@ public class DistributedIMap<K, V>
     }
 
     @Override
+    public void writeAll(final Map<? extends K, ? extends V> values) {
+        delegate.putAll(values);
+    }
+
+    @Override
     public boolean replace(K key, V expected, V newValue) {
         return delegate.replace(key, expected, newValue);
     }

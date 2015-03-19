@@ -27,7 +27,7 @@ public interface DistributedHazelcastMap<K, V>
     }
 
     @CheckReturnValue
-    default DistributedHazelcastMap<K, V> filter(final KeyPredicate<K> predicate) {
+    default DistributedHazelcastMap<K, V> filter(final KeyPredicate<? super K> predicate) {
         return new DistributedFilteredHazelcastMap<>(this, predicate);
     }
 

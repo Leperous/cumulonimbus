@@ -3,7 +3,6 @@ package net.ollie.distributed.collections;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -85,7 +84,8 @@ public class DistributedKeyValueSource<K, V>
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
+        partitionKeys = null;
     }
 
     @Override
@@ -99,7 +99,7 @@ public class DistributedKeyValueSource<K, V>
     }
 
     @Override
-    protected Collection<K> getAllKeys0() {
+    protected Set<K> getAllKeys0() {
         return source.copyKeys();
     }
 
