@@ -3,6 +3,7 @@ package net.ollie.distributed.phases;
 import javax.annotation.Nonnull;
 
 /**
+ * Can throw a checked exception.
  *
  * @author Ollie
  */

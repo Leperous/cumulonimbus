@@ -34,7 +34,7 @@ public final class Operations {
             final SupplyPhase<M1> supplier,
             final FuturePhase<M1, M2> mapReducer,
             final Phase<M2, M3> augmenter) {
-        return supplier.andThen(mapReducer).andLater(augmenter).get();
+        return supplier.later(mapReducer).later(augmenter).get();
     }
 
 }

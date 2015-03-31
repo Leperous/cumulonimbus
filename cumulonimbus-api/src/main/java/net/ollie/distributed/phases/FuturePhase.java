@@ -19,22 +19,22 @@ import javax.annotation.Nonnull;
 public interface FuturePhase<F, T> extends Phase<F, CompletableFuture<T>> {
 
     @CheckReturnValue
-    default <X> FuturePhase<F, X> andLater(@Nonnull final Phase<? super T, ? extends X> that) {
+    default <X> FuturePhase<F, X> later(@Nonnull final Phase<? super T, ? extends X> that) {
         return input -> this.transform(input).thenApply(that::transform);
     }
 
     @CheckReturnValue
-    default <X> FuturePhase<F, X> andLater(@Nonnull final Phase<? super T, ? extends X> that, @Nonnull final Executor executor) {
+    default <X> FuturePhase<F, X> later(@Nonnull final Phase<? super T, ? extends X> that, @Nonnull final Executor executor) {
         return input -> this.transform(input).thenApplyAsync(that::transform, executor);
     }
 
     @CheckReturnValue
-    default ExceptionalPhase<F, T, AsyncException> andWait(@Nonnull final Duration timeout) {
-        return this.andWait(timeout.toNanos(), TimeUnit.NANOSECONDS);
+    default ExceptionalPhase<F, T, AsyncException> wait(@Nonnull final Duration timeout) {
+        return this.wait(timeout.toNanos(), TimeUnit.NANOSECONDS);
     }
 
     @CheckReturnValue
-    default ExceptionalPhase<F, T, AsyncException> andWait(@Nonnegative final long timeout, @Nonnull final TimeUnit timeoutUnit) {
+    default ExceptionalPhase<F, T, AsyncException> wait(@Nonnegative final long timeout, @Nonnull final TimeUnit timeoutUnit) {
         return input -> {
             try {
                 return this.transform(input).get(timeout, timeoutUnit);

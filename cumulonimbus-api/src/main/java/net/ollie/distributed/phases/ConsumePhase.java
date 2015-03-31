@@ -17,7 +17,7 @@ public interface ConsumePhase<T> extends Phase<T, T> {
         return from;
     }
 
-    static <T> ConsumePhase<T> async(final Consumer<? super T> consumer, final Executor executor) {
+    static <T> ConsumePhase<T> async(final Executor executor, final Consumer<? super T> consumer) {
         return object -> executor.execute(() -> consumer.accept(object));
     }
 

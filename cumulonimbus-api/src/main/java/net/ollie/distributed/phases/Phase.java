@@ -14,13 +14,13 @@ public interface Phase<F, T> {
 
     @Nonnull
     @CheckReturnValue
-    default <X> Phase<F, X> andThen(final Phase<? super T, ? extends X> that) {
+    default <T2> Phase<F, T2> then(final Phase<? super T, ? extends T2> that) {
         return input -> that.transform(this.transform(input));
     }
 
     @Nonnull
     @CheckReturnValue
-    default <X> FuturePhase<F, X> andThen(final FuturePhase<? super T, X> that) {
+    default <T2> FuturePhase<F, T2> later(final FuturePhase<? super T, T2> that) {
         return input -> that.transform(this.transform(input));
     }
 
