@@ -21,20 +21,20 @@ import net.ollie.distributed.functions.SerializableBiFunction;
  *
  * @author Ollie
  */
-public class DistributedMergeValueMap<K, A, B, V>
-        implements DistributedHazelcastMap<K, V>, DataSerializable {
+public class MergeValueMap<K, A, B, V>
+        implements HazelcastMap<K, V>, DataSerializable {
 
-    private DistributedHazelcastMap<K, A> left;
-    private DistributedHazelcastMap<K, B> right;
+    private HazelcastMap<K, A> left;
+    private HazelcastMap<K, B> right;
     private SerializableBiFunction<? super A, ? super B, ? extends V> merge;
 
     @Deprecated
-    DistributedMergeValueMap() {
+    MergeValueMap() {
     }
 
-    public DistributedMergeValueMap(
-            @Nonnull final DistributedHazelcastMap<K, A> left,
-            @Nonnull final DistributedHazelcastMap<K, B> right,
+    public MergeValueMap(
+            @Nonnull final HazelcastMap<K, A> left,
+            @Nonnull final HazelcastMap<K, B> right,
             @Nonnull final SerializableBiFunction<? super A, ? super B, ? extends V> merge) {
         this.left = requireNonNull(left);
         this.right = requireNonNull(right);

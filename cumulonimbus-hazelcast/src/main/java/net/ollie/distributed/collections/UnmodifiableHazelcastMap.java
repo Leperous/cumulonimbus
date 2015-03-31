@@ -13,16 +13,16 @@ import com.hazelcast.nio.serialization.DataSerializable;
  *
  * @author Ollie
  */
-public class DistributedUnmodifiableHazelcastMap<K, V>
-        implements DistributedHazelcastMap<K, V>, DataSerializable {
+public class UnmodifiableHazelcastMap<K, V>
+        implements HazelcastMap<K, V>, DataSerializable {
 
-    private DistributedHazelcastMap<K, ? extends V> delegate;
+    private HazelcastMap<K, ? extends V> delegate;
 
     @Deprecated
-    DistributedUnmodifiableHazelcastMap() {
+    UnmodifiableHazelcastMap() {
     }
 
-    public DistributedUnmodifiableHazelcastMap(final DistributedHazelcastMap<K, ? extends V> delegate) {
+    public UnmodifiableHazelcastMap(final HazelcastMap<K, ? extends V> delegate) {
         this.delegate = delegate;
     }
 

@@ -21,17 +21,17 @@ import com.hazelcast.nio.serialization.DataSerializable;
  *
  * @author Ollie
  */
-public class DistributedIMap<K, V>
-        implements DistributedHazelcastMap<K, V>, MutableDistributedMap<K, V>, HazelcastInstanceAware, DataSerializable {
+public class HazelcastIMap<K, V>
+        implements HazelcastMap<K, V>, MutableDistributedMap<K, V>, HazelcastInstanceAware, DataSerializable {
 
     private String mapName;
     private transient volatile IMap<K, V> delegate;
 
     @Deprecated
-    DistributedIMap() {
+    HazelcastIMap() {
     }
 
-    public DistributedIMap(@Nonnull final IMap<K, V> delegate) {
+    public HazelcastIMap(@Nonnull final IMap<K, V> delegate) {
         this.mapName = delegate.getName();
         this.delegate = delegate;
     }

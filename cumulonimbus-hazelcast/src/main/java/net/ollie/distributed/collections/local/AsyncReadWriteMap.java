@@ -12,16 +12,16 @@ import com.hazelcast.core.IMap;
  *
  * @author Ollie
  */
-public abstract class LocalAsyncReadWriteMap<K, V>
-        extends LocalAsyncReadMap<K, V> {
+public class AsyncReadWriteMap<K, V>
+        extends AsyncReadMap<K, V> {
 
     private final Function<? super K, ? extends V> read;
-    private final BiConsumer<K, V> write;
+    private final BiConsumer<? super K, ? super V> write;
 
-    protected LocalAsyncReadWriteMap(
-            final IMap<K, V> distributedMap,
+    protected AsyncReadWriteMap(
+            final IMap<? extends K, ? extends V> distributedMap,
             final Function<? super K, ? extends V> read,
-            final BiConsumer<K, V> write) {
+            final BiConsumer<? super K, ? super V> write) {
         super(distributedMap);
         this.read = read;
         this.write = write;

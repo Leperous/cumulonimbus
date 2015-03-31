@@ -16,20 +16,20 @@ import net.ollie.distributed.utils.Lists;
  *
  * @author Ollie
  */
-public class DistributedMergeKeyMap<K, V, V1, K2, V2>
-        implements DistributedHazelcastMap<K, V>, DataSerializable {
+public class MergeKeyMap<K, V, V1, K2, V2>
+        implements HazelcastMap<K, V>, DataSerializable {
 
-    private DistributedHazelcastMap<K, V1> map;
+    private HazelcastMap<K, V1> map;
     private LocalMap<K2, V2> localMap;
     private SerializableBiFunction<? super K, ? super V1, ? extends K2> localKeyFunction;
     private SerializableBiFunction<? super V1, ? super V2, ? extends V> valueFunction;
 
     @Deprecated
-    DistributedMergeKeyMap() {
+    MergeKeyMap() {
     }
 
-    public DistributedMergeKeyMap(
-            final DistributedHazelcastMap<K, V1> map,
+    public MergeKeyMap(
+            final HazelcastMap<K, V1> map,
             final LocalMap<K2, V2> localMap,
             final SerializableBiFunction<? super K, ? super V1, ? extends K2> localKeyFunction,
             final SerializableBiFunction<? super V1, ? super V2, ? extends V> valueFunction) {

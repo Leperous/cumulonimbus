@@ -1,5 +1,6 @@
 package net.ollie.distributed.collections.local;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -24,22 +25,22 @@ import com.hazelcast.core.MapEvent;
  *
  * @author Ollie
  */
-public abstract class LocalAsyncReadMap<K, V>
+public class AsyncReadMap<K, V>
         implements LocalMap<K, V> {
 
     private final ConcurrentMap<K, V> localMap;
     private final String id;
 
-    protected LocalAsyncReadMap(@Nonnull final IMap<K, V> distributedMap) {
+    protected AsyncReadMap(@Nonnull final IMap<? extends K, ? extends V> distributedMap) {
         this(distributedMap, new ConcurrentHashMap<>(distributedMap.size()));
     }
 
-    protected LocalAsyncReadMap(@Nonnull final IMap<K, V> distributedMap, @Nonnull final ConcurrentMap<K, V> localMap) {
+    protected AsyncReadMap(@Nonnull final IMap<? extends K, ? extends V> distributedMap, @Nonnull final ConcurrentMap<K, V> localMap) {
         this.id = distributedMap.getName();
         this.localMap = listenTo(distributedMap);
     }
 
-    private static <K, V> ConcurrentMap<K, V> listenTo(final IMap<K, V> distributedMap) {
+    private static <K, V> ConcurrentMap<K, V> listenTo(final IMap<? extends K, ? extends V> distributedMap) {
         final ConcurrentMap<K, V> map = new ConcurrentHashMap<>(distributedMap.size());
         distributedMap.addEntryListener(new UpdatingEntryListener<>(map), true);
         distributedMap.entrySet().forEach(entry -> map.putIfAbsent(entry.getKey(), entry.getValue()));
@@ -79,11 +80,19 @@ public abstract class LocalAsyncReadMap<K, V>
         return localMap.size();
     }
 
+    @Override
+    public void evict(final Collection<K> keys) {
+    }
+
+    @Override
+    public void close() {
+    }
+
     private static final class UpdatingEntryListener<K, V> implements EntryListener<K, V> {
 
-        private final Map<K, V> map;
+        private final Map<? super K, ? super V> map;
 
-        UpdatingEntryListener(final Map<K, V> delegate) {
+        UpdatingEntryListener(final Map<? super K, ? super V> delegate) {
             this.map = delegate;
         }
 

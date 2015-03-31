@@ -4,27 +4,27 @@ import static java.util.Objects.requireNonNull;
 
 import com.hazelcast.core.IMap;
 
-import net.ollie.distributed.collections.DistributedHazelcastMap;
+import net.ollie.distributed.collections.HazelcastMap;
 
 /**
  *
  * @author Ollie
  */
 public class HazelcastMapSupplyPhase<K, V>
-        implements SupplyPhase<DistributedHazelcastMap<K, V>> {
+        implements SupplyPhase<HazelcastMap<K, V>> {
 
     public static <K, V> HazelcastMapSupplyPhase<K, V> create(final IMap<K, V> map) {
-        return new HazelcastMapSupplyPhase<>(DistributedHazelcastMap.unmodifiable(map));
+        return new HazelcastMapSupplyPhase<>(HazelcastMap.unmodifiable(map));
     }
 
-    private final DistributedHazelcastMap<K, V> map;
+    private final HazelcastMap<K, V> map;
 
-    public HazelcastMapSupplyPhase(final DistributedHazelcastMap<K, V> map) {
+    public HazelcastMapSupplyPhase(final HazelcastMap<K, V> map) {
         this.map = requireNonNull(map);
     }
 
     @Override
-    public DistributedHazelcastMap<K, V> get() {
+    public HazelcastMap<K, V> get() {
         return map;
     }
 

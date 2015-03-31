@@ -28,13 +28,13 @@ public class DistributedKeyValueSource<K, V>
         extends KeyValueSource<K, V>
         implements PartitionIdAware, DataSerializable {
 
-    private DistributedHazelcastMap<K, ? extends V> source;
+    private HazelcastMap<K, ? extends V> source;
     private transient int partitionId;
     private transient K nextKey;
     private transient Iterator<K> partitionKeys;
     private transient Map<Integer, List<K>> partitions;
 
-    public DistributedKeyValueSource(final DistributedHazelcastMap<K, ? extends V> source) {
+    public DistributedKeyValueSource(final HazelcastMap<K, ? extends V> source) {
         this.source = source;
     }
 

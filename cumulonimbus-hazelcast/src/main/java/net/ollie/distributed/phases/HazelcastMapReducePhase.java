@@ -11,7 +11,7 @@ import com.hazelcast.mapreduce.Mapper;
 import com.hazelcast.mapreduce.ReducerFactory;
 import com.hazelcast.mapreduce.ReducingSubmittableJob;
 
-import net.ollie.distributed.collections.DistributedHazelcastMap;
+import net.ollie.distributed.collections.HazelcastMap;
 import net.ollie.distributed.utils.Futures;
 
 /**
@@ -19,16 +19,16 @@ import net.ollie.distributed.utils.Futures;
  *
  * @author Ollie
  */
-public abstract class HazelcastMapReducePhase<K1, V1, K2, V2> implements FuturePhase<DistributedHazelcastMap<K1, V1>, Map<K2, V2>> {
+public abstract class HazelcastMapReducePhase<K1, V1, K2, V2> implements FuturePhase<HazelcastMap<K1, V1>, Map<K2, V2>> {
 
-    public static <K1, V1, K2, V2> FuturePhase<DistributedHazelcastMap<K1, V1>, Map<K2, V2>> mapReduce(
+    public static <K1, V1, K2, V2> FuturePhase<HazelcastMap<K1, V1>, Map<K2, V2>> mapReduce(
             final JobTracker jobTracker,
             final Mapper<K1, V1, K2, V1> mapper,
             final ReducerFactory<K2, V1, V2> reducer) {
         return new MapReduce<>(jobTracker, mapper, reducer);
     }
 
-    public static <K1, V1, C1, C2, K2, V2> FuturePhase<DistributedHazelcastMap<K1, V1>, Map<K2, V2>> mapCombineReduce(
+    public static <K1, V1, C1, C2, K2, V2> FuturePhase<HazelcastMap<K1, V1>, Map<K2, V2>> mapCombineReduce(
             final JobTracker jobTracker,
             final Mapper<K1, V1, K2, C1> mapper,
             final CombinerFactory<K2, C1, C2> combiner,
@@ -43,7 +43,7 @@ public abstract class HazelcastMapReducePhase<K1, V1, K2, V2> implements FutureP
     }
 
     @Override
-    public CompletableFuture<Map<K2, V2>> transform(DistributedHazelcastMap<K1, V1> from) {
+    public CompletableFuture<Map<K2, V2>> transform(HazelcastMap<K1, V1> from) {
         final Job<K1, V1> trackingJob = this.trackingJob(from);
         final ReducingSubmittableJob<K1, K2, V2> mapReduceJob = this.mapReduceJob(trackingJob);
         return this.submit(mapReduceJob);
@@ -51,7 +51,7 @@ public abstract class HazelcastMapReducePhase<K1, V1, K2, V2> implements FutureP
 
     protected abstract ReducingSubmittableJob<K1, K2, V2> mapReduceJob(final Job<K1, V1> job);
 
-    private Job<K1, V1> trackingJob(final DistributedHazelcastMap<K1, V1> map) {
+    private Job<K1, V1> trackingJob(final HazelcastMap<K1, V1> map) {
         return tracker.newJob(map.source());
     }
 

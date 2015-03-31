@@ -15,13 +15,13 @@ import com.hazelcast.nio.serialization.DataSerializable;
  *
  * @author Ollie
  */
-public class DistributedFilteredHazelcastMap<K, V>
-        implements DistributedHazelcastMap<K, V>, DataSerializable {
+public class FilteredHazelcastMap<K, V>
+        implements HazelcastMap<K, V>, DataSerializable {
 
-    private DistributedHazelcastMap<K, V> delegate;
+    private HazelcastMap<K, V> delegate;
     private KeyPredicate<? super K> predicate;
 
-    public DistributedFilteredHazelcastMap(final DistributedHazelcastMap<K, V> delegate, final KeyPredicate<? super K> predicate) {
+    public FilteredHazelcastMap(final HazelcastMap<K, V> delegate, final KeyPredicate<? super K> predicate) {
         this.delegate = delegate;
         this.predicate = predicate;
     }
