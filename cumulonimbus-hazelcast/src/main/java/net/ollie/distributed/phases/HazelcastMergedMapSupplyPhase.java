@@ -7,7 +7,7 @@ import net.ollie.distributed.collections.MergeValueMap;
 import net.ollie.distributed.functions.SerializableBiFunction;
 
 /**
- * Supply a merger of two distributed maps.
+ * Supply a merge of two distributed maps.
  *
  * @author Ollie
  */

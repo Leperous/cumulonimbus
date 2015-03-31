@@ -13,7 +13,7 @@ import net.ollie.distributed.collections.HazelcastMap;
 public class HazelcastMapSupplyPhase<K, V>
         implements SupplyPhase<HazelcastMap<K, V>> {
 
-    public static <K, V> HazelcastMapSupplyPhase<K, V> create(final IMap<K, V> map) {
+    public static <K, V> HazelcastMapSupplyPhase<K, V> of(final IMap<K, V> map) {
         return new HazelcastMapSupplyPhase<>(HazelcastMap.unmodifiable(map));
     }
 
