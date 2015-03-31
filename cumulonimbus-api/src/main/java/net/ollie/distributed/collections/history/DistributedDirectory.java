@@ -8,9 +8,9 @@ import net.ollie.distributed.collections.DistributedMap;
  *
  * @author Ollie
  */
-public interface DistributedHistory<T, K, V> {
+public interface DistributedDirectory<T, K, V> {
 
     @Nonnull
-    DistributedMap<K, V> on(T date);
+    DistributedMap<K, V> at(T key);
 
 }

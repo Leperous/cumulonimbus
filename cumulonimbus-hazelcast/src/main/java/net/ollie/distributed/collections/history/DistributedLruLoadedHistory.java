@@ -18,7 +18,7 @@ import net.ollie.distributed.functions.SerializableBiPredicate;
  * @author Ollie
  */
 public class DistributedLruLoadedHistory<T, K, V>
-        implements DistributedHazelcastHistory<T, K, V> {
+        implements HazelcastDirectory<T, K, V> {
 
     private static final Logger logger = LoggerFactory.getLogger(DistributedLruLoadedHistory.class);
     private final LinkedHashMap<T, HazelcastMap<K, V>> maps;
@@ -37,8 +37,8 @@ public class DistributedLruLoadedHistory<T, K, V>
     }
 
     @Override
-    public synchronized HazelcastMap<K, V> on(final T date) {
-        return maps.computeIfAbsent(date, this::load);
+    public synchronized HazelcastMap<K, V> at(final T temporal) {
+        return maps.computeIfAbsent(temporal, this::load);
     }
 
     protected HazelcastMap<K, V> load(final T date) {

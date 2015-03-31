@@ -8,10 +8,10 @@ import net.ollie.distributed.serialization.MustNotSerialize;
  * @author Ollie
  */
 @MustNotSerialize
-public interface DistributedHazelcastHistory<T, K, V>
-        extends DistributedHistory<T, K, V> {
+public interface HazelcastDirectory<T, K, V>
+        extends DistributedDirectory<T, K, V> {
 
     @Override
-    HazelcastMap<K, V> on(T date);
+    HazelcastMap<K, V> at(T temporal);
 
 }
