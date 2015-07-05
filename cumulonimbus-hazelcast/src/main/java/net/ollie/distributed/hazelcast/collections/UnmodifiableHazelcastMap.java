@@ -2,7 +2,6 @@ package net.ollie.distributed.hazelcast.collections;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;
 
@@ -36,7 +35,7 @@ public class UnmodifiableHazelcastMap<K, V>
 
     @Override
     public Set<K> copyKeys() {
-        return Collections.unmodifiableSet(delegate.copyKeys());
+        return delegate.copyKeys();
     }
 
     @Override

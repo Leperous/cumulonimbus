@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import static java.util.stream.Collectors.toList;
 
 import com.hazelcast.mapreduce.KeyPredicate;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
+
+import net.ollie.distributed.utils.Lists;
 
 /**
  *
@@ -54,7 +55,7 @@ public class FilteredHazelcastMap<K, V>
 
     @Override
     public void evict(final Collection<K> keys) {
-        final Collection<K> filtered = keys.stream().filter(predicate::evaluate).collect(toList());
+        final Collection<K> filtered = Lists.filter(keys, predicate::evaluate);
         delegate.evict(filtered);
     }
 

@@ -20,14 +20,14 @@ public interface DistributedMap<K, V>
 
     /**
      *
-     * @return an unmodifiable copy of the keys in this map.
+     * @return a mutable copy of the keys in this map.
      */
     @Nonnull
     Set<K> copyKeys();
 
     /**
      *
-     * @return an unmodifiable copy of all the key/value pairs in this map.
+     * @return a mutable copy of all the key/value pairs in this map.
      */
     @Nonnull
     default Map<K, V> copyMap() {
@@ -38,7 +38,7 @@ public interface DistributedMap<K, V>
     default <K2 extends K> Map<K2, V> copyMap(final Set<K2> keys) {
         final Map<K2, V> local = Maps.newHashMap(keys.size());
         keys.forEach(key -> local.put(key, this.get(key)));
-        return Collections.unmodifiableMap(local);
+        return local;
     }
 
     default boolean isEmpty() {
