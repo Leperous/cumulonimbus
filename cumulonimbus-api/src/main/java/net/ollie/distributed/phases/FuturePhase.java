@@ -11,6 +11,8 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import net.ollie.distributed.serialization.MustNotDistribute;
+
 /**
  * A phase that transforms into a future result.
  *
@@ -18,6 +20,7 @@ import javax.annotation.Nonnull;
  * @param <F> from type
  * @param <T> to type
  */
+@MustNotDistribute
 public interface FuturePhase<F, T> extends Phase<F, CompletableFuture<T>> {
 
     @CheckReturnValue

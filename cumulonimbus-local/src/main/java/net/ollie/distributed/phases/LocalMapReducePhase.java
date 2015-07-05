@@ -1,93 +1,73 @@
 package net.ollie.distributed.phases;
 
-import java.util.ArrayList;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-import java.util.function.BiFunction;
 import java.util.function.Function;
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import net.ollie.distributed.collections.DistributedMap;
-import net.ollie.distributed.collections.DistributedFunction;
+import net.ollie.distributed.utils.Lists;
+import net.ollie.distributed.utils.Maps;
 
 /**
+ *
  * @author Ollie
  */
-public class LocalMapReducePhase<K1, V1, K2, V2> implements FuturePhase<DistributedMap<K1, V1>, Map<K2, V2>> {
+public class LocalMapReducePhase<K1, V1, K2, V2> implements FuturePhase<Map<K1, V1>, Map<K2, V2>> {
 
-    private static final CompletableFuture[] FUTURES = new CompletableFuture[0];
-    private final Executor executor;
-    private final BiFunction<K1, V1, ? extends Collection<Map.Entry<? extends K2, ? extends Collection<V1>>>> map;
-    private final Function<? super Collection<V1>, V2> reduce;
+    private final boolean parallel;
+    private final Function<? super K1, ? extends K2> mapper;
+    private final Function<? super Collection<? extends V1>, ? extends V2> reducer;
 
     public LocalMapReducePhase(
-            final Executor executor,
-            final BiFunction<K1, V1, ? extends Collection<Map.Entry<? extends K2, ? extends Collection<V1>>>> map,
-            final Function<? super Collection<V1>, V2> reduce) {
-        this.executor = executor;
-        this.map = map;
-        this.reduce = reduce;
+            final boolean parallel,
+            final Function<? super K1, ? extends K2> mapper,
+            final Function<? super Collection<? extends V1>, ? extends V2> reducer) {
+        this.parallel = parallel;
+        this.mapper = mapper;
+        this.reducer = reducer;
     }
 
     @Override
-    public CompletableFuture<Map<K2, V2>> transform(final DistributedMap<K1, V1> input) {
-        return this.mapAll(input).thenComposeAsync(this::reduceAll, executor);
+    public CompletableFuture<Map<K2, V2>> transform(final Map<K1, V1> from) {
+        return CompletableFuture.supplyAsync(() -> this.mapReduce(from));
     }
 
-    private CompletableFuture<Map<K2, Collection<V1>>> mapAll(final DistributedMap<K1, V1> source) {
-        final Map<K2, Collection<V1>> multimap = new ConcurrentHashMap<>();
-        final List<CompletableFuture<?>> futures = source.copyKeys()
-                .stream()
-                .map(key -> this.map(key, source, multimap)) //Create a future for each key
-                .collect(toList());
-        return CompletableFuture.allOf(futures.toArray(FUTURES)).thenApply(v -> multimap);
+    protected Map<K2, V2> mapReduce(final Map<K1, V1> from) {
+        final Map<K2, List<Map.Entry<K1, V1>>> mapped = this.map(from);
+        return this.reduce(mapped);
     }
 
-    private CompletableFuture<?> map(final K1 key, final DistributedFunction<K1, V1> source, final Map<K2, Collection<V1>> multimap) {
-        return CompletableFuture.runAsync(() -> {
-            final Map<K2, Collection<V1>> mapped = this.map(key, source.get(key));
-            mapped.entrySet().forEach(entry -> this.write(entry, multimap));
-        }, executor);
+    private Map<K2, List<Map.Entry<K1, V1>>> map(final Map<K1, V1> from) {
+        return this.stream(from.entrySet()).collect(this.mapperCollector());
     }
 
-    private Map<K2, Collection<V1>> map(final K1 key, final V1 value) {
-        final Map<K2, Collection<V1>> output = new HashMap<>();
-        map.apply(key, value).forEach(entry -> output.put(entry.getKey(), entry.getValue()));
-        return output;
+    private Collector<Map.Entry<K1, V1>, ?, Map<K2, List<Map.Entry<K1, V1>>>> mapperCollector() {
+        return Collectors.groupingBy(this::mapped);
     }
 
-    private void write(final Map.Entry<K2, Collection<V1>> entry, final Map<K2, Collection<V1>> multimap) {
-        multimap.computeIfAbsent(entry.getKey(), this::newBucket).addAll(entry.getValue());
+    private K2 mapped(final Map.Entry<K1, V1> entry) {
+        return mapper.apply(entry.getKey());
     }
 
-    protected <T> Collection<T> newBucket(final K2 key) {
-        return Collections.synchronizedList(new ArrayList<>()); //FIXME
+    private Map<K2, V2> reduce(final Map<K2, List<Map.Entry<K1, V1>>> mapped) {
+        return this.stream(mapped.entrySet())
+                .map(this::reduce)
+                .collect(Maps.collectEntries());
     }
 
-    private CompletableFuture<Map<K2, V2>> reduceAll(final Map<K2, ? extends Collection<V1>> multimap) {
-        final Map<K2, V2> reductions = new ConcurrentHashMap<>();
-        final List<CompletableFuture<?>> futures = multimap.entrySet()
-                .stream()
-                .map(entry -> this.reduce(entry, reductions))
-                .collect(toList());
-        return CompletableFuture.allOf(futures.toArray(FUTURES)).thenApply(v -> reductions);
+    private Map.Entry<K2, V2> reduce(final Map.Entry<K2, List<Map.Entry<K1, V1>>> entry) {
+        final List<V1> values = Lists.serialTransform(entry.getValue(), Map.Entry::getValue);
+        final V2 reduced = reducer.apply(values);
+        return new SimpleImmutableEntry<>(entry.getKey(), reduced);
     }
 
-    private CompletableFuture<?> reduce(final Map.Entry<K2, ? extends Collection<V1>> entry, final Map<K2, V2> reductions) {
-        return CompletableFuture.runAsync(() -> {
-            final V2 reduced = this.doReduce(entry.getValue());
-            reductions.put(entry.getKey(), reduced);
-        });
-    }
-
-    private V2 doReduce(final Collection<V1> values) {
-        return reduce.apply(values);
+    private <T> Stream<T> stream(final Collection<T> collection) {
+        return parallel ? collection.parallelStream() : collection.stream();
     }
 
 }

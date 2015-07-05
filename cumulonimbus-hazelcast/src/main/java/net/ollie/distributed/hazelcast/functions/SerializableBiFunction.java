@@ -6,12 +6,13 @@ import java.util.function.BiFunction;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
-import com.hazelcast.nio.serialization.DataSerializable;
+import net.ollie.distributed.serialization.MustDistribute;
 
 /**
  *
  * @author Ollie
  */
+@MustDistribute
 public interface SerializableBiFunction<A, B, T> extends BiFunction<A, B, T>, Serializable {
 
     @Override

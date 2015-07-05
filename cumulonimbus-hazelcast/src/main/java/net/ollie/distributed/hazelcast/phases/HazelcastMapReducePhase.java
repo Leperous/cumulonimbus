@@ -14,12 +14,14 @@ import com.hazelcast.mapreduce.ReducingSubmittableJob;
 import net.ollie.distributed.hazelcast.collections.HazelcastMap;
 import net.ollie.distributed.phases.FuturePhase;
 import net.ollie.distributed.hazelcast.utils.HazelcastFutures;
+import net.ollie.distributed.serialization.MustNotDistribute;
 
 /**
  * Executes map/reduce phase on Hazelcast, given a mapper, combiner and reducer.
  *
  * @author Ollie
  */
+@MustNotDistribute
 public abstract class HazelcastMapReducePhase<K1, V1, K2, V2>
         implements FuturePhase<HazelcastMap<K1, V1>, Map<K2, V2>>, HazelcastFutures {
 

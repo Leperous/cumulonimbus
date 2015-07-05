@@ -8,10 +8,13 @@ import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
 
+import net.ollie.distributed.serialization.MustDistribute;
+
 /**
  *
  * @author Ollie
  */
+@MustDistribute
 public interface SerializableBiPredicate<A, B> extends BiPredicate<A, B>, Serializable {
 
     default SerializablePredicate<B> partialLeft(final A first) {

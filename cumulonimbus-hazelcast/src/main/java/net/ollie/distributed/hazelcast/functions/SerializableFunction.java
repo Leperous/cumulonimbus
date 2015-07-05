@@ -6,12 +6,13 @@ import java.util.function.Function;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import com.hazelcast.nio.serialization.DataSerializable;
+import net.ollie.distributed.serialization.MustDistribute;
 
 /**
  *
  * @author Ollie
  */
+@MustDistribute
 public interface SerializableFunction<F, T> extends Function<F, T>, Serializable {
 
     @Override

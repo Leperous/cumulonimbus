@@ -14,7 +14,7 @@
     <packaging>jar</packaging>
     
     <properties>
-        <hazelcast.version>3.4.1</hazelcast.version>
+        <hazelcast.version>3.5</hazelcast.version>
     </properties>
     
     <dependencies>
@@ -27,6 +27,12 @@
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
             <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     

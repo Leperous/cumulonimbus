@@ -13,11 +13,20 @@ import net.ollie.distributed.phases.SupplyPhase;
  *
  * @author Ollie
  */
-public final class Operations {
+public final class MapReduce {
 
-    private Operations() {
+    private MapReduce() {
     }
 
+    /**
+     * Map/reduce a map into a future map.
+     *
+     * @param <M1> input map type.
+     * @param <M2> output map type.
+     * @param map input map.
+     * @param mapReducer phase that will transform the input map.
+     * @return
+     */
     public static <M1 extends DistributedFunction<?, ?>, M2 extends Map<?, ?>> CompletableFuture<M2> mapReduce(
             final M1 map,
             final FuturePhase<M1, M2> mapReducer) {

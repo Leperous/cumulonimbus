@@ -8,4 +8,28 @@
     </parent>
     <artifactId>cumulonimbus-hadoop</artifactId>
     <packaging>jar</packaging>
+    
+    <properties>
+        <hadoop.version>2.7.0</hadoop.version>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cumulonimbus-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce</artifactId>
+            <version>${hadoop.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+    </dependencies>
+    
 </project>
