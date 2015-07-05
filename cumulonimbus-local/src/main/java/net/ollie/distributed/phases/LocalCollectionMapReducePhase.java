@@ -15,14 +15,14 @@ import java.util.stream.Stream;
  *
  * @author Ollie
  */
-public class LocalCollectionReducePhase<T, R> implements FuturePhase<Collection<T>, R> {
+public class LocalCollectionMapReducePhase<T, R> implements FuturePhase<Collection<T>, R> {
 
     private final boolean parallel;
     private final Function<? super T, ? extends R> mapper;
     private final Supplier<? extends R> initial;
     private final BinaryOperator<R> reducer;
 
-    public LocalCollectionReducePhase(
+    public LocalCollectionMapReducePhase(
             final boolean parallel,
             final Function<? super T, ? extends R> mapper,
             final Supplier<? extends R> initial,

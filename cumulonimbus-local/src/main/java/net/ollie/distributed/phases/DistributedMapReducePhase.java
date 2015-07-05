@@ -19,7 +19,7 @@ import net.ollie.distributed.collections.DistributedFunction;
 /**
  * @author Ollie
  */
-public class LocalDistributedMapReducePhase<K1, V1, K2, V2>
+public class DistributedMapReducePhase<K1, V1, K2, V2>
         implements FuturePhase<DistributedMap<K1, V1>, Map<K2, V2>> {
 
     @SuppressWarnings("rawtypes")
@@ -29,7 +29,7 @@ public class LocalDistributedMapReducePhase<K1, V1, K2, V2>
     private final BiFunction<K1, V1, ? extends Collection<Map.Entry<? extends K2, ? extends Collection<V1>>>> map;
     private final Function<? super Collection<V1>, V2> reduce;
 
-    public LocalDistributedMapReducePhase(
+    public DistributedMapReducePhase(
             final Executor executor,
             final BiFunction<K1, V1, ? extends Collection<Map.Entry<? extends K2, ? extends Collection<V1>>>> map,
             final Function<? super Collection<V1>, V2> reduce) {
