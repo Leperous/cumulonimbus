@@ -20,7 +20,7 @@ public interface ExceptionalPhase<F, T, X extends Exception> extends Phase<F, T>
         } catch (final RuntimeException rex) {
             throw rex;
         } catch (final Exception cex) {
-            throw new RuntimeException(cex);
+            throw new RuntimeException("Error transforming [" + from + "]", cex);
         }
     }
 

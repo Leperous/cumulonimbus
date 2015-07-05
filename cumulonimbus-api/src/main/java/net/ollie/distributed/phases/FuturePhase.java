@@ -12,9 +12,11 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 /**
- * Transforms into a future.
+ * A phase that transforms into a future result.
  *
  * @author Ollie
+ * @param <F> from type
+ * @param <T> to type
  */
 public interface FuturePhase<F, T> extends Phase<F, CompletableFuture<T>> {
 
@@ -48,7 +50,7 @@ public interface FuturePhase<F, T> extends Phase<F, CompletableFuture<T>> {
 
         private static final long serialVersionUID = 1L;
 
-        public AsyncException(final Exception cause) {
+        protected AsyncException(final Exception cause) {
             super(cause);
         }
 

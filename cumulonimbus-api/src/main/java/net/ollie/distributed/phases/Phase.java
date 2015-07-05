@@ -3,10 +3,13 @@ package net.ollie.distributed.phases;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
+import net.ollie.distributed.serialization.MustNotDistribute;
+
 /**
  *
  * @author Ollie
  */
+@MustNotDistribute
 public interface Phase<F, T> {
 
     @Nonnull

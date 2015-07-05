@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import net.ollie.distributed.functions.NonnullSupplier;
 
 /**
+ * A phase that can supply objects without requiring input.
  *
  * @author Ollie
  */

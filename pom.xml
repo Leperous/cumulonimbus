@@ -20,6 +20,7 @@
         <module>cumulonimbus-api</module>
         <module>cumulonimbus-hazelcast</module>
         <module>cumulonimbus-local</module>
+        <module>cumulonimbus-hadoop</module>
     </modules>
     
     <dependencies>

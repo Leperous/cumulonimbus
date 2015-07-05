@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
  *
  * @author Ollie
  */
+@FunctionalInterface
 public interface NonnullSupplier<T> extends Supplier<T> {
 
     @Nonnull

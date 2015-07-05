@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import net.ollie.distributed.utils.Lists;
 
 /**
+ * A phase that awaits completion of a collection of futures.
  *
  * @author Ollie
  */
