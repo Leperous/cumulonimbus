@@ -17,7 +17,7 @@ import net.ollie.distributed.hazelcast.utils.HazelcastFutures;
 import net.ollie.distributed.serialization.MustNotDistribute;
 
 /**
- * Executes map/reduce phase on Hazelcast, given a mapper, combiner and reducer.
+ * Executes map/reduce phase on Hazelcast, given a job tracker, mapper, combiner and reducer.
  *
  * @author Ollie
  */
@@ -47,7 +47,7 @@ public abstract class HazelcastMapReducePhase<K1, V1, K2, V2>
     }
 
     @Override
-    public CompletableFuture<Map<K2, V2>> transform(HazelcastMap<K1, V1> from) {
+    public CompletableFuture<Map<K2, V2>> transform(final HazelcastMap<K1, V1> from) {
         final Job<K1, V1> trackingJob = this.trackingJob(from);
         final ReducingSubmittableJob<K1, K2, V2> mapReduceJob = this.mapReduceJob(trackingJob);
         return this.submit(mapReduceJob);
@@ -55,11 +55,11 @@ public abstract class HazelcastMapReducePhase<K1, V1, K2, V2>
 
     protected abstract ReducingSubmittableJob<K1, K2, V2> mapReduceJob(final Job<K1, V1> job);
 
-    private Job<K1, V1> trackingJob(final HazelcastMap<K1, V1> map) {
+    protected Job<K1, V1> trackingJob(final HazelcastMap<K1, V1> map) {
         return tracker.newJob(map.source());
     }
 
-    private CompletableFuture<Map<K2, V2>> submit(final ReducingSubmittableJob<K1, K2, V2> job) {
+    protected CompletableFuture<Map<K2, V2>> submit(final ReducingSubmittableJob<K1, K2, V2> job) {
         return this.convertFuture(job.submit());
     }
 

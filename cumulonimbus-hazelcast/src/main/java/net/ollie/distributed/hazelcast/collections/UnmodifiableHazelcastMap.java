@@ -3,7 +3,10 @@ package net.ollie.distributed.hazelcast.collections;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
@@ -22,8 +25,8 @@ public class UnmodifiableHazelcastMap<K, V>
     UnmodifiableHazelcastMap() {
     }
 
-    public UnmodifiableHazelcastMap(final HazelcastMap<K, ? extends V> delegate) {
-        this.delegate = delegate;
+    public UnmodifiableHazelcastMap(@Nonnull final HazelcastMap<K, ? extends V> delegate) {
+        this.delegate = requireNonNull(delegate);
     }
 
     @Override

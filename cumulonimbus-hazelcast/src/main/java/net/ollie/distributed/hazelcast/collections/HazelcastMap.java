@@ -42,11 +42,11 @@ public interface HazelcastMap<K, V>
     @Override
     void close();
 
-    static <K, V> HazelcastMap<K, V> unmodifiable(final IMap<K, V> map) {
+    static <K, V> HazelcastMap<K, V> unmodifiable(@Nonnull final IMap<K, V> map) {
         return new UnmodifiableHazelcastMap<>(mutable(map));
     }
 
-    static <K, V> HazelcastIMap<K, V> mutable(final IMap<K, V> map) {
+    static <K, V> HazelcastIMap<K, V> mutable(@Nonnull final IMap<K, V> map) {
         return new HazelcastIMap<>(map);
     }
 

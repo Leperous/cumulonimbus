@@ -8,7 +8,7 @@ import net.ollie.distributed.hazelcast.functions.SerializableBiFunction;
 import net.ollie.distributed.phases.SupplyPhase;
 
 /**
- * Supply a merge of two distributed maps.
+ * Supply a merge of two distributed maps that have a common key type.
  *
  * @author Ollie
  */

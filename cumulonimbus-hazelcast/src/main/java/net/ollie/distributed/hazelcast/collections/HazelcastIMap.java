@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -19,7 +20,7 @@ import com.hazelcast.nio.serialization.DataSerializable;
 import net.ollie.distributed.collections.MutableDistributedMap;
 
 /**
- * Wrapper around a Hazelcast {@link IMap}.
+ * Wrapper around a single Hazelcast {@link IMap}.
  *
  * @author Ollie
  */
@@ -34,8 +35,7 @@ public class HazelcastIMap<K, V>
     }
 
     public HazelcastIMap(@Nonnull final IMap<K, V> delegate) {
-        this.mapName = delegate.getName();
-        this.delegate = delegate;
+        this.delegate = requireNonNull(delegate);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class HazelcastIMap<K, V>
 
     @Override
     public void writeData(final ObjectDataOutput out) throws IOException {
-        out.writeUTF(mapName);
+        out.writeUTF(delegate.getName());
     }
 
     @Override
