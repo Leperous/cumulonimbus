@@ -53,4 +53,26 @@ public interface SupplyPhase<T> extends Phase<Object, T>, NonnullSupplier<T> {
 
     }
 
+    interface ExceptionalSupplyPhase<T, X extends Exception> extends SupplyPhase<T>, ExceptionalPhase<Object, T, X> {
+
+        T getExceptionally() throws X;
+
+        @Override
+        default T get() {
+            return this.transform(null);
+        }
+
+        @Override
+        @Deprecated
+        default T transform(final Object object) {
+            return ExceptionalPhase.super.transform(object);
+        }
+
+        @Override
+        default T transformChecked(final Object from) throws X {
+            return this.getExceptionally();
+        }
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package net.ollie.distributed.hadoop.phases;
 
+import java.io.IOException;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -16,7 +17,7 @@ import net.ollie.distributed.phases.FuturePhase;
  * @author Ollie
  */
 public class HadoopJobExecutionPhase
-        implements FuturePhase<Job, Void> {
+        implements FuturePhase<Job, Boolean> {
 
     private final boolean verbose;
     private final Executor executor;
@@ -27,18 +28,15 @@ public class HadoopJobExecutionPhase
     }
 
     @Override
-    public CompletableFuture<Void> transform(@Nonnull final Job job) {
+    public CompletableFuture<Boolean> transform(@Nonnull final Job job) {
         requireNonNull(job);
-        final CompletableFuture<Void> future = CompletableFuture.completedFuture(null);
-        executor.execute(() -> {
+        return CompletableFuture.supplyAsync(() -> {
             try {
-                job.waitForCompletion(verbose);
-                future.complete(null);
-            } catch (final Throwable ex) {
-                future.completeExceptionally(ex);
+                return job.waitForCompletion(verbose);
+            } catch (final IOException | ClassNotFoundException | InterruptedException t) {
+                throw new RuntimeException(t);
             }
-        });
-        return future;
+        }, executor);
     }
 
 }
